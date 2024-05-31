@@ -4,71 +4,69 @@ server:
 jwt:
   secret: MiAVzqUXy5Tfr1kVIGpPMiAVzqUXy5Tfr1kVIGpP
   expiration: 86400
-
 spring:
-  application:
-    name: gateway-service
-  config:
-    import: optional:configserver:${CONFIG_SERVER_URL:https://jo-config-service-918490e97d40.herokuapp.com/}
   cloud:
+    config:
+      uri: https://jo-config-service-918490e97d40.herokuapp.com/
+    discovery:
+      client:
+        serviceUrl:
+          defaultZone: https://jo-discovery-service-24208bfc4a7a.herokuapp.com/eureka
     gateway:
-      httpclient:
-        connect-timeout: 15000  # 5 seconds
-        response-timeout: 90000 # 30 seconds
       routes:
+        - id: user-service
+          uri: https://jo-user-service-2782f3d3f018.herokuapp.com
+          predicates:
+            - Path=/users/**
+          filters:
+            - JwtTokenFilterFactory
+
         - id: auth-service
-          uri: lb://AUTH-SERVICE
+          uri: https://jo-auth-service-38e185cc6a7c.herokuapp.com
           predicates:
             - Path=/auth/**
           filters:
             - JwtTokenFilterFactory
 
         - id: event-service
-          uri: lb://EVENT-SERVICE
+          uri: https://jo-event-service-0ecf0045b38e.herokuapp.com
           predicates:
-            - Path=/events/**
+            - Path=/event/**
             - Path=/offertypes/**
             - Path=/prices/**
           filters:
             - JwtTokenFilterFactory
 
         - id: key-generator-service
-          uri: lb://KEY-GENERATOR-SERVICE
+          uri: https://jo-key-generetor-service-67aff5ae6d48.herokuapp.com
           predicates:
             - Path=/key-generator/**
           filters:
             - JwtTokenFilterFactory
 
         - id: notification-service
-          uri: lb://NOTIFICATION-SERVICE
+          uri: https://jo-notification-service-48e1b7043d33.herokuapp.com
           predicates:
             - Path=/notifications/**
           filters:
             - JwtTokenFilterFactory
 
         - id: payment-service
-          uri: lb://PAYMENT-SERVICE
+          uri: https://jo-payment-service-c36c53af4676.herokuapp.com
           predicates:
             - Path=/payments/**
           filters:
             - JwtTokenFilterFactory
 
         - id: ticket-service
-          uri: lb://TICKET-SERVICE
+          uri: https://jo-ticket-service-0c6161138f5a.herokuapp.com
           predicates:
             - Path=/tickets/**
           filters:
             - JwtTokenFilterFactory
 
-        - id: user-service
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/users/**
-          filters:
-            - JwtTokenFilterFactory
-
         - id: venue-service
-          uri: lb://VENUE-SERVICE
+          uri: https://jo-venue-service-01ba5601048e.herokuapp.com
           predicates:
             - Path=/venues/**
             - Path=/locations/**
@@ -83,7 +81,6 @@ spring:
             allowedHeaders: "*"
             allowCredentials: true
 
-    discovery:
-      client:
-        serviceUrl:
-          defaultZone: https://jo-discovery-service-24208bfc4a7a.herokuapp.com/eureka
+  application:
+    name: gateway-service
+
