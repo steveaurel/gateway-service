@@ -13,8 +13,8 @@ spring:
   cloud:
     gateway:
       httpclient:
-        connect-timeout: 5000  # 5 seconds
-        response-timeout: 30000 # 30 seconds
+        connect-timeout: 15000  # 5 seconds
+        response-timeout: 90000 # 30 seconds
       routes:
         - id: auth-service
           uri: lb://AUTH-SERVICE
