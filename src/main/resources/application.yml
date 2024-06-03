@@ -81,3 +81,5 @@ spring:
       client:
         serviceUrl:
           defaultZone: https://jo-discovery-service-24208bfc4a7a.herokuapp.com/eureka
+      locator:
+        enabled: true
